@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import com.example.demo.entity.base.BaseEntity;
-import com.example.demo.entity.base.File;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -29,5 +28,5 @@ public class User  extends BaseEntity {
     private String oauthId;
     @JoinColumn
     @OneToOne(cascade = CascadeType.ALL)
-    private File avatar;
+    private Image avatar;
 }

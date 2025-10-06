@@ -1,14 +1,15 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.RoomDetails;
 import com.example.demo.entity.Room;
 
 import java.util.List;
 
 public interface RoomService {
 
-    List<Room> findAll();
+    List<RoomDetails> findAll();
 
-    Room findById(Long id);
+    RoomDetails findById(Long id);
 
     Room save(Room room);
 

@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import com.example.demo.entity.base.BaseEntity;
-import com.example.demo.entity.base.File;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -25,7 +24,7 @@ public class Room extends BaseEntity {
     @Column
     private String description;
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<File> photos;
+    private List<Image> photos;
     @Column
     private String price;
 }
