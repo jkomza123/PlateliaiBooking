@@ -15,4 +15,7 @@ public class RoomDetails {
     @Getter
     @Setter
     private List<String> photoUrlList;
+    @Getter
+    @Setter
+    private String price;
 }
