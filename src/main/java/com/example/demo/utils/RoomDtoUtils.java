@@ -16,10 +16,13 @@ public class RoomDtoUtils {
         if (room == null) return null;
 
         RoomDetails dto = new RoomDetails();
-        dto.setName(room.getName());
-        dto.setDescription(room.getDescription());
+        dto.setNameLt(room.getNameLt());
+        dto.setNameEn(room.getNameEn());
+        dto.setDescriptionLt(room.getDescriptionLt());
+        dto.setDescriptionEn(room.getDescriptionEn());
         dto.setPhotoUrlList(mapFileListToUrls(room.getPhotos()));
         dto.setPrice(room.getPrice());
+        dto.setPeopleNumber(room.getPeopleNumber());
 
         return dto;
     }

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.BookingDetails;
 import com.example.demo.entity.Booking;
 import com.example.demo.service.BookingService;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public Booking createBooking(@RequestBody Booking booking) {
-        return bookingService.save(booking);
-    }
-
-    @PutMapping("/{id}")
-    public Booking updateBooking(@PathVariable Long id, @RequestBody Booking booking) {
-        booking.setId(id);
+    public Booking createBooking(@RequestBody BookingDetails booking) {
         return bookingService.save(booking);
     }
 

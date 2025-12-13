@@ -21,6 +21,14 @@ public class RoomController {
         return roomService.findAll();
     }
 
+    @GetMapping("/search")
+    public List<RoomDetails> searchRooms(
+            @RequestParam String from,
+            @RequestParam String to
+    ) {
+        return roomService.searchRooms(from, to);
+    }
+
     @GetMapping("/{id}")
     public RoomDetails getRoom(@PathVariable Long id) {
         return roomService.findById(id);

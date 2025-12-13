@@ -1,16 +1,34 @@
 package com.example.demo.dto;
 
 import com.example.demo.enums.ResourceStatusEnum;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.security.Timestamp;
-import java.util.List;
+import java.time.LocalDate;
 
 public class BookingDetails {
+    @Getter
+    @Setter
     private String email;
+    @Getter
+    @Setter
     private String price;
-    private List<RoomDetails> roomList;
+    @Getter
+    @Setter
+    private RoomDetails room;
+    @Getter
+    @Setter
     private String ownerName;
-    private Timestamp startDate;
-    private Timestamp endDate;
+    @Getter
+    @Setter
+    private Long ownerId;
+    @Getter
+    @Setter
+    private LocalDate startDate;
+    @Getter
+    @Setter
+    private LocalDate endDate;
+    @Getter
+    @Setter
     private ResourceStatusEnum status;
 }

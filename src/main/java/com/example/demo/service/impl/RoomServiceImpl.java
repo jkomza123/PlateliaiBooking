@@ -8,6 +8,7 @@ import com.example.demo.utils.RoomDtoUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,16 @@ public class RoomServiceImpl implements RoomService {
 
     public List<RoomDetails> findAll() {
         return roomDao.findAll()
+            .stream()
+            .map(RoomDtoUtils::mapRoomToDetails)
+            .collect(Collectors.toList());
+    }
+
+    public List<RoomDetails> searchRooms(String from, String to) {
+        LocalDate fromDate = LocalDate.parse(from);
+        LocalDate toDate = LocalDate.parse(to);
+
+        return roomDao.findAvailableRooms(fromDate, toDate)
             .stream()
             .map(RoomDtoUtils::mapRoomToDetails)
             .collect(Collectors.toList());

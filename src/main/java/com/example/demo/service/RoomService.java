@@ -9,6 +9,8 @@ public interface RoomService {
 
     List<RoomDetails> findAll();
 
+    List<RoomDetails> searchRooms(String from, String to);
+
     RoomDetails findById(Long id);
 
     Room save(Room room);

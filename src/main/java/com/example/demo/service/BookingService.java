@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.BookingDetails;
 import com.example.demo.entity.Booking;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface BookingService  {
 
     Booking findById(Long id);
 
-    Booking save(Booking booking);
+    Booking save(BookingDetails bookingDetails);
 
     void delete(Long id);
 }

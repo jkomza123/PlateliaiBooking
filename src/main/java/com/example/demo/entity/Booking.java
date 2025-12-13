@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.security.Timestamp;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,16 +22,16 @@ public class Booking extends BaseEntity {
     private String email;
     @Column
     private String price;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User owner;
     @Column
-    private Timestamp startDate;
+    private LocalDate startDate;
     @Column
-    private Timestamp endDate;
+    private LocalDate endDate;
     @Column
     private ResourceStatusEnum status;
 }
