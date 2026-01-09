@@ -16,6 +16,7 @@ public class RoomDtoUtils {
         if (room == null) return null;
 
         RoomDetails dto = new RoomDetails();
+        dto.setId(room.getId());
         dto.setNameLt(room.getNameLt());
         dto.setNameEn(room.getNameEn());
         dto.setDescriptionLt(room.getDescriptionLt());
