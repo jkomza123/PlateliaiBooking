@@ -32,4 +32,11 @@ public class Room extends BaseEntity {
     private BigDecimal price;
     @Column
     private Integer peopleNumber;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "room_feature_map",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "feature_id")
+    )
+    private List<Feature> features;
 }

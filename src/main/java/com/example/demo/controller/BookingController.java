@@ -21,6 +21,15 @@ public class BookingController {
         return bookingService.findAll();
     }
 
+    @GetMapping("/room")
+    public List<Booking> BookingsByRoom(
+            @RequestParam Long id,
+            @RequestParam String from,
+            @RequestParam String to
+    ) {
+        return bookingService.findBookingsByRoom(id, from, to);
+    }
+
     @GetMapping("/{id}")
     public Booking getBooking(@PathVariable Long id) {
         return bookingService.findById(id);

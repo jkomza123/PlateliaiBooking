@@ -11,14 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "image")
+@Table(name = "feature")
 @Access(AccessType.FIELD)
 @Entity
-public class Image extends BaseEntity {
+public class Feature extends BaseEntity {
+    @Column(unique = true)
+    private String code;
     @Column
-    private String url;
-
-    @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
+    private String icon;
 }

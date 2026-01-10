@@ -24,6 +24,7 @@ public class RoomDtoUtils {
         dto.setPhotoUrlList(mapFileListToUrls(room.getPhotos()));
         dto.setPrice(room.getPrice());
         dto.setPeopleNumber(room.getPeopleNumber());
+        dto.setFeatures(room.getFeatures());
 
         return dto;
     }

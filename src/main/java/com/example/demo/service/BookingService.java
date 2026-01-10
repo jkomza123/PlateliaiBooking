@@ -9,6 +9,8 @@ public interface BookingService  {
 
     List<Booking> findAll();
 
+    List<Booking> findBookingsByRoom(Long id, String from, String to);
+
     Booking findById(Long id);
 
     Booking save(BookingDetails bookingDetails);

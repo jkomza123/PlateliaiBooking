@@ -9,6 +9,7 @@ import com.example.demo.service.BookingService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,6 +26,13 @@ public class BookingServiceImpl implements BookingService {
 
     public List<Booking> findAll() {
         return bookingDao.findAll();
+    }
+
+    public List<Booking> findBookingsByRoom(Long id, String from, String to) {
+        LocalDate fromDate = LocalDate.parse(from);
+        LocalDate toDate = LocalDate.parse(to);
+
+        return bookingDao.findBookingsByRoom(id, fromDate, toDate);
     }
 
     public Booking findById(Long id) {
