@@ -26,6 +26,10 @@ public class Room extends BaseEntity {
     private String descriptionLt;
     @Column
     private String descriptionEn;
+    @Column
+    private String descriptionLtShort;
+    @Column
+    private String descriptionEnShort;
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Image> photos;
     @Column
