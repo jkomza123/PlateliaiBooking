@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.BookingDetails;
-import com.example.demo.entity.Booking;
+import com.example.demo.dto.StripeResponseDetails;
 import com.example.demo.service.BookingService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +17,12 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<Booking> getAllBookings() {
+    public List<BookingDetails> getAllBookings() {
         return bookingService.findAll();
     }
 
     @GetMapping("/room")
-    public List<Booking> BookingsByRoom(
+    public List<BookingDetails> BookingsByRoom(
             @RequestParam Long id,
             @RequestParam String from,
             @RequestParam String to
@@ -31,13 +31,13 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public Booking getBooking(@PathVariable Long id) {
+    public BookingDetails getBooking(@PathVariable Long id) {
         return bookingService.findById(id);
     }
 
-    @PostMapping
-    public Booking createBooking(@RequestBody BookingDetails booking) {
-        return bookingService.save(booking);
+    @PostMapping("/checkout")
+    public StripeResponseDetails createBooking(@RequestBody BookingDetails booking) {
+        return bookingService.createBookingAndCheckout(booking);
     }
 
     @DeleteMapping("/{id}")

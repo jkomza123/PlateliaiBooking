@@ -1,34 +1,38 @@
 package com.example.demo.dto;
 
-import com.example.demo.enums.ResourceStatusEnum;
+import com.example.demo.enums.BookingStatusEnum;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class BookingDetails {
     @Getter
     @Setter
-    private String email;
-    @Getter
-    @Setter
-    private String price;
-    @Getter
-    @Setter
-    private RoomDetails room;
+    private Long Id;
     @Getter
     @Setter
     private String ownerName;
     @Getter
     @Setter
-    private Long ownerId;
+    private String email;
     @Getter
     @Setter
-    private LocalDate startDate;
+    private String phoneNumber;
     @Getter
     @Setter
-    private LocalDate endDate;
+    private BigDecimal price;
     @Getter
     @Setter
-    private ResourceStatusEnum status;
+    private Long roomId;
+    @Getter
+    @Setter
+    private LocalDate dateFrom;
+    @Getter
+    @Setter
+    private LocalDate dateTo;
+    @Getter
+    @Setter
+    private BookingStatusEnum status;
 }

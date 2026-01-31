@@ -12,8 +12,8 @@ public interface BookingDao extends JpaRepository<Booking, Long> {
     @Query("""
         SELECT b FROM Booking b
         WHERE b.room.id = :id
-        AND b.startDate <= :to
-        AND b.endDate >= :from
+        AND b.dateFrom <= :to
+        AND b.dateTo >= :from
     """)
     List<Booking> findBookingsByRoom(
             @Param("id") Long id,

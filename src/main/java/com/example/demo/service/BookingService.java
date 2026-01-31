@@ -1,19 +1,23 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BookingDetails;
-import com.example.demo.entity.Booking;
+import com.example.demo.dto.StripeResponseDetails;
 
 import java.util.List;
 
 public interface BookingService  {
 
-    List<Booking> findAll();
+    List<BookingDetails> findAll();
 
-    List<Booking> findBookingsByRoom(Long id, String from, String to);
+    List<BookingDetails> findBookingsByRoom(Long id, String from, String to);
 
-    Booking findById(Long id);
+    BookingDetails findById(Long id);
 
-    Booking save(BookingDetails bookingDetails);
+    StripeResponseDetails createBookingAndCheckout(BookingDetails bookingDetails);
+
+    void cancelBooking(Long bookingId);
+
+    void confirmBooking(Long bookingId);
 
     void delete(Long id);
 }
