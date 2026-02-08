@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.dao.RoomDao;
 import com.example.demo.dto.RoomDetails;
 import com.example.demo.entity.Room;
+import com.example.demo.enums.BookingStatusEnum;
 import com.example.demo.service.RoomService;
 import com.example.demo.utils.RoomDtoUtils;
 import jakarta.transaction.Transactional;
@@ -31,7 +32,7 @@ public class RoomServiceImpl implements RoomService {
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
 
-        return roomDao.findAvailableRooms(fromDate, toDate)
+        return roomDao.findAvailableRooms(fromDate, toDate, BookingStatusEnum.CANCELLED)
             .stream()
             .map(RoomDtoUtils::mapRoomToDetails)
             .collect(Collectors.toList());

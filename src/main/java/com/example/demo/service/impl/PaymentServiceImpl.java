@@ -10,6 +10,9 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
@@ -22,9 +25,14 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     public StripeResponseDetails checkoutBooking(Long bookingId, long amountInCents, String orderNumber) {
+        long expiresAt = Instant.now()
+                .plus(30, ChronoUnit.MINUTES)
+                .getEpochSecond();
+
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
+                        .setExpiresAt(expiresAt)
                         .setSuccessUrl("http://localhost:8080/success")
                         .setCancelUrl("http://localhost:8080/cancelled")
                         .addLineItem(

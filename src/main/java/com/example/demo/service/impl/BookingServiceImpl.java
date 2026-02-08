@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public class BookingServiceImpl implements BookingService {
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
 
-        return bookingDao.findBookingsByRoom(id, fromDate, toDate)
+        return bookingDao.findBookingsByRoom(id, fromDate, toDate, BookingStatusEnum.CANCELLED)
                 .stream()
                 .map(BookingDtoUtils::mapBookingToDetails)
                 .collect(Collectors.toList());
@@ -76,17 +77,32 @@ public class BookingServiceImpl implements BookingService {
         return bookingDao.save(booking);
     }
 
+    @Transactional
+    public Booking saveBookingWithLock(BookingDetails bookingDetails) {
+        var overlapping = bookingDao.findBookingsByRoom(
+                bookingDetails.getRoomId(),
+                bookingDetails.getDateFrom(),
+                bookingDetails.getDateTo(),
+                BookingStatusEnum.CANCELLED
+        );
+
+        if (!overlapping.isEmpty()) throw new IllegalArgumentException("Booking on this date already exists");
+
+        return save(bookingDetails);
+    }
+
     public StripeResponseDetails createBookingAndCheckout(BookingDetails bookingDetails) {
-        Booking booking = save(bookingDetails);
+        Booking booking = saveBookingWithLock(bookingDetails);
 
         long amountInCents = booking.getPrice()
                 .multiply(BigDecimal.valueOf(100))
+                .setScale(2, RoundingMode.HALF_UP)
                 .longValueExact();
 
         return paymentService.checkoutBooking(
                 booking.getId(),
                 amountInCents,
-                "Booking #" + booking.getId()
+                "Užsakymas #" + booking.getId() + " - " + booking.getRoom().getNameLt()
         );
     }
 
