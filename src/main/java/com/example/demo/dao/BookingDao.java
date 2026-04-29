@@ -16,11 +16,13 @@ public interface BookingDao extends JpaRepository<Booking, Long> {
         AND b.dateFrom < :to
         AND b.dateTo > :from
         AND b.status <> :cancelled
+        AND b.status <> :expired
     """)
     List<Booking> findBookingsByRoom(
             @Param("id") Long id,
             @Param("from") LocalDate from,
             @Param("to") LocalDate to,
-            @Param("cancelled") BookingStatusEnum cancelled
+            @Param("cancelled") BookingStatusEnum cancelled,
+            @Param("expired") BookingStatusEnum expired
     );
 }

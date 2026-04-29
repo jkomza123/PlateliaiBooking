@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.BookingDetails;
 import com.example.demo.dto.StripeResponseDetails;
 import com.example.demo.service.BookingService;
+import com.example.demo.service.EmailService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,14 +13,16 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
-    public BookingController(BookingService bookingService) {
+    private final EmailService emailService;
+    public BookingController(BookingService bookingService, EmailService emailService) {
         this.bookingService = bookingService;
+        this.emailService = emailService;
     }
 
-    @GetMapping
-    public List<BookingDetails> getAllBookings() {
-        return bookingService.findAll();
-    }
+//    @GetMapping
+//    public List<BookingDetails> getAllBookings() {
+//        return bookingService.findAll();
+//    }
 
     @GetMapping("/room")
     public List<BookingDetails> BookingsByRoom(
@@ -40,8 +43,9 @@ public class BookingController {
         return bookingService.createBookingAndCheckout(booking);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteBooking(@PathVariable Long id) {
-        bookingService.delete(id);
+    @PostMapping("/cancel/{id}")
+    public void deleteBooking(@PathVariable Long id, @RequestParam String token) {
+        bookingService.cancelBooking(id, token);
+        emailService.sendBookingCancelledEmail(id);
     }
 }

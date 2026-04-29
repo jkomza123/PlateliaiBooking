@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.BookingService;
+import com.example.demo.service.EmailService;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
 import com.stripe.model.Event;
@@ -17,9 +18,14 @@ public class PaymentController {
     private String webhookSecret;
 
     private final BookingService bookingService;
+    private final EmailService emailService;
 
-    public PaymentController(BookingService bookingService) {
+    public PaymentController(
+            BookingService bookingService,
+            EmailService emailService
+    ) {
         this.bookingService = bookingService;
+        this.emailService = emailService;
     }
 
     @PostMapping
@@ -48,10 +54,6 @@ public class PaymentController {
             case "checkout.session.expired" -> {
                 handleCheckoutExpired(event);
             }
-
-            case "payment_intent.payment_failed" -> {
-                handlePaymentFailed(event);
-            }
         }
 
         return ResponseEntity.ok("Received");
@@ -68,6 +70,7 @@ public class PaymentController {
         );
 
         bookingService.confirmBooking(bookingId);
+        emailService.sendBookingEmail(bookingId);
     }
 
     private void handleCheckoutExpired(Event event) {
@@ -80,19 +83,6 @@ public class PaymentController {
                 session.getMetadata().get("booking_id")
         );
 
-        bookingService.cancelBooking(bookingId);
-    }
-
-    private void handlePaymentFailed(Event event) {
-        Session session = (Session) event
-                .getDataObjectDeserializer()
-                .getObject()
-                .orElseThrow();
-
-        Long bookingId = Long.valueOf(
-                session.getMetadata().get("booking_id")
-        );
-
-        bookingService.cancelBooking(bookingId);
+        bookingService.expireBooking(bookingId);
     }
 }

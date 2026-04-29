@@ -19,12 +19,15 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${stripe.apiKey}")
     String apiKey;
 
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
+
     @PostConstruct
     public void init() {
         Stripe.apiKey = apiKey;
     }
 
-    public StripeResponseDetails checkoutBooking(Long bookingId, long amountInCents, String orderNumber) {
+    public StripeResponseDetails checkoutBooking(Long bookingId, Long roomId, long amountInCents, String orderNumber) {
         long expiresAt = Instant.now()
                 .plus(30, ChronoUnit.MINUTES)
                 .getEpochSecond();
@@ -33,8 +36,8 @@ public class PaymentServiceImpl implements PaymentService {
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
                         .setExpiresAt(expiresAt)
-                        .setSuccessUrl("http://localhost:8080/success")
-                        .setCancelUrl("http://localhost:8080/cancelled")
+                        .setSuccessUrl(frontendUrl + "/success?bookingId=" + bookingId)
+                        .setCancelUrl(frontendUrl + "/room/" + roomId)
                         .addLineItem(
                                 SessionCreateParams.LineItem.builder()
                                         .setQuantity(1L)

@@ -14,6 +14,8 @@ public class BookingDtoUtils {
         BookingDetails dto = new BookingDetails();
         dto.setId(booking.getId());
         dto.setRoomId(booking.getRoom().getId());
+        dto.setRoomNameLt(booking.getRoom().getNameLt());
+        dto.setRoomNameEn(booking.getRoom().getNameEn());
         dto.setDateFrom(booking.getDateFrom());
         dto.setDateTo(booking.getDateTo());
         dto.setEmail(booking.getEmail());
@@ -21,6 +23,16 @@ public class BookingDtoUtils {
         dto.setPhoneNumber(booking.getPhoneNumber());
         dto.setPrice(booking.getPrice());
         dto.setStatus(booking.getStatus());
+
+        return dto;
+    }
+
+    public static BookingDetails mapBookingToMinimalDetails(Booking booking) {
+        if (booking == null) return null;
+
+        BookingDetails dto = new BookingDetails();
+        dto.setDateFrom(booking.getDateFrom());
+        dto.setDateTo(booking.getDateTo());
 
         return dto;
     }

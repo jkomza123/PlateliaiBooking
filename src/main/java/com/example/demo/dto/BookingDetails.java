@@ -35,4 +35,13 @@ public class BookingDetails {
     @Getter
     @Setter
     private BookingStatusEnum status;
+    @Getter
+    @Setter
+    private String roomNameLt;
+    @Getter
+    @Setter
+    private String roomNameEn;
+    @Getter
+    @Setter
+    private String language;
 }

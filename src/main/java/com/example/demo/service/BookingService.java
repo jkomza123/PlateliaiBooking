@@ -15,9 +15,9 @@ public interface BookingService  {
 
     StripeResponseDetails createBookingAndCheckout(BookingDetails bookingDetails);
 
-    void cancelBooking(Long bookingId);
+    void expireBooking(Long bookingId);
 
     void confirmBooking(Long bookingId);
 
-    void delete(Long id);
+    void cancelBooking(Long id, String token);
 }

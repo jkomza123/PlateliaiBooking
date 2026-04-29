@@ -36,4 +36,8 @@ public class Booking extends BaseEntity {
     private LocalDate dateTo;
     @Column
     private BookingStatusEnum status;
+    @Column
+    private String deleteToken;
+    @Column
+    private String language;
 }

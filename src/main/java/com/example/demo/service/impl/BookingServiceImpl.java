@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,9 +49,9 @@ public class BookingServiceImpl implements BookingService {
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
 
-        return bookingDao.findBookingsByRoom(id, fromDate, toDate, BookingStatusEnum.CANCELLED)
+        return bookingDao.findBookingsByRoom(id, fromDate, toDate, BookingStatusEnum.CANCELLED, BookingStatusEnum.EXPIRED)
                 .stream()
-                .map(BookingDtoUtils::mapBookingToDetails)
+                .map(BookingDtoUtils::mapBookingToMinimalDetails)
                 .collect(Collectors.toList());
     }
 
@@ -74,6 +76,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setRoom(room);
         booking.setPhoneNumber(bookingDetails.getPhoneNumber());
         booking.setOwnerName(bookingDetails.getOwnerName());
+        booking.setLanguage(bookingDetails.getLanguage() != null ? bookingDetails.getLanguage() : "lt");
         return bookingDao.save(booking);
     }
 
@@ -83,7 +86,8 @@ public class BookingServiceImpl implements BookingService {
                 bookingDetails.getRoomId(),
                 bookingDetails.getDateFrom(),
                 bookingDetails.getDateTo(),
-                BookingStatusEnum.CANCELLED
+                BookingStatusEnum.CANCELLED,
+                BookingStatusEnum.EXPIRED
         );
 
         if (!overlapping.isEmpty()) throw new IllegalArgumentException("Booking on this date already exists");
@@ -99,10 +103,13 @@ public class BookingServiceImpl implements BookingService {
                 .setScale(2, RoundingMode.HALF_UP)
                 .longValueExact();
 
+        String orderNumber = booking.getLanguage().equals("en") ? "Order #" + booking.getId() + " - " + booking.getRoom().getNameEn() : "Užsakymas #" + booking.getId() + " - " + booking.getRoom().getNameLt();
+
         return paymentService.checkoutBooking(
                 booking.getId(),
+                booking.getRoom().getId(),
                 amountInCents,
-                "Užsakymas #" + booking.getId() + " - " + booking.getRoom().getNameLt()
+                orderNumber
         );
     }
 
@@ -111,19 +118,31 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingDao.findById(bookingId)
                 .orElseThrow();
 
+        String token = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+        booking.setDeleteToken(token);
         booking.setStatus(BookingStatusEnum.CONFIRMED);
     }
 
     @Transactional
-    public void cancelBooking(Long bookingId) {
+    public void expireBooking(Long bookingId) {
         Booking booking = bookingDao.findById(bookingId)
                 .orElseThrow();
-
-        booking.setStatus(BookingStatusEnum.CANCELLED);
+        if (booking.getStatus() == BookingStatusEnum.CONFIRMED) {
+            throw new RuntimeException("Booking cannot be expired");
+        }
+        booking.setStatus(BookingStatusEnum.EXPIRED);
     }
 
     @Transactional
-    public void delete(Long id) {
-        bookingDao.deleteById(id);
+    public void cancelBooking(Long id, String token) {
+        Booking booking = bookingDao.findById(id)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        if (!Objects.equals(booking.getDeleteToken(), token)) {
+            throw new RuntimeException("Invalid token");
+        }
+        if (booking.getStatus() != BookingStatusEnum.CONFIRMED) {
+            throw new RuntimeException("Booking cannot be deleted");
+        }
+        booking.setStatus(BookingStatusEnum.CANCELLED);
     }
 }
